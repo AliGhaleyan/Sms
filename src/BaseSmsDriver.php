@@ -11,22 +11,10 @@ namespace Serjik\Sms;
  */
 abstract class BaseSmsDriver
 {
-    protected $apiKey;
-    protected $lineNumber;
     protected $serviceName;
     protected $service;
     protected $config = [];
     protected $number = [];
-    protected $loop = true;
-
-    public function __construct(array $config = [])
-    {
-        if (count($config)) {
-            $this->apiKey = $config['api_key'];
-            $this->lineNumber = $config['line_number'];
-            $this->setConfig($config);
-        }
-    }
 
     /**
      * set number or numbers to send message
@@ -59,13 +47,11 @@ abstract class BaseSmsDriver
      */
     final public function send($message)
     {
+        if (!class_exists($this->serviceName)) throw new \Exception("not installed the driver package or invalid property serviceName");
+        $this->connection();
         $contacts = $this->getContact();
-        if (is_array($contacts) && $this->loop) {
-            $results = [];
-            foreach ($contacts as $key => $contact) {
-                $results[] = $this->handle($contact, is_array($message) ? $message[$key] : $message);
-            }
-            return $results;
+        if (is_array($contacts)) {
+            return $this->handleBulk($contacts, $message);
         } else {
             return $this->handle($contacts, $message);
         }
@@ -78,26 +64,23 @@ abstract class BaseSmsDriver
      * @param $message
      * @return mixed
      */
-    abstract public function handle($contacts, $message);
+    abstract public function handle($contact, $message);
 
     /**
-     * create instance of api service
-     */
-    public function instance()
-    {
-        if (class_exists($this->serviceName))
-            $this->service = new $this->serviceName($this->getConfig('api_key'));
-    }
-
-    /**
-     * set service class name
+     * send bulk sms
      *
-     * @param $service
+     * @param $contacts
+     * @param $message
+     * @return mixed
      */
-    public function setService($service)
-    {
-        $this->serviceName = $service;
-    }
+    abstract public function handleBulk($contacts, $message);
+
+    /**
+     * action connect to api master
+     *
+     * @return mixed
+     */
+    abstract public function connection();
 
     /**
      * get config
