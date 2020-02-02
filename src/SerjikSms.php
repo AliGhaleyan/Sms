@@ -39,8 +39,6 @@ class SerjikSms
         /** @var BaseSmsDriver $driverClass */
         $driverClass = new $driverClass($config);
         if (is_callable([$driverClass, 'setConfig'])) $driverClass->setConfig($config);
-        if (isset($config['service'])) $driverClass->setService($config['service']);
-        if (is_callable([$driverClass, 'setService'])) $driverClass->instance();
 
         return $driverClass;
     }
