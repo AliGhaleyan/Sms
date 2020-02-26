@@ -7,7 +7,7 @@
 
 ### Installation:
 ```
-composer require serjik/sms
+composer require alighale/sms
 ```
 You must add the service provider to `config/app.php`
 ```php
