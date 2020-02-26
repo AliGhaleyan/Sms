@@ -1,5 +1,5 @@
 {
-    "name": "serjik/sms",
+    "name": "alighale/sms",
     "description": "Easily use Iranian SMS services",
     "type": "library",
     "require": {
