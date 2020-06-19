@@ -3,8 +3,8 @@
     "description": "Easily use Iranian SMS services",
     "type": "library",
     "require": {
-        "php": "^7.2",
-        "laravel/framework": "^6.2"
+        "php": ">=7",
+        "laravel/framework": ">=6.2"
     },
     "keywords": [
         "sms",
